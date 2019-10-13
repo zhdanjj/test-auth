@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setLocale } from '../actions';
+import { setLocale } from '@/redux/actions/locale';
 import './LangPicker.css';
 
 const langs = [
@@ -39,7 +39,7 @@ const LangPicker = props => {
 }
 
 const mapStateToProps = state => {
-  return {locale: state.app.locale}
+  return {locale: state.locale.locale}
 }
 
 const ConnectedLangPicker = connect(mapStateToProps)(LangPicker);

@@ -3,35 +3,17 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import './AuthForm.css';
-import { required, minLength } from '../validators';
+import { required, minLength } from '@/validators';
+import field from '@/components/AuthFormField';
 
 // https://github.com/erikras/redux-form/issues/2629#issuecomment-423811863
 const validatePass = [required, minLength(6)];
 
-const renderField = ({
-  intl,
-  input,
-  label,
-  type,
-  meta: { touched, error }
-}) => (
-  <label className="form__line">
-    <span className="form__label">
-      <FormattedMessage
-        id={label}
-      />
-    </span>
-    <input {...input} className="form__input" type={type} />
-    <div className="form__err">
-      { touched && error && <span>{intl.formatMessage(error.descriptor, error.data)}</span> }
-    </div>
-  </label>
-);
 
-const internatiolizedRenderField = injectIntl(renderField);
+const internatiolizedRenderField = injectIntl(field);
 
 function AuthForm(props) {
-  const { handleSubmit, isFetching } = props;
+  const { handleSubmit, handleInputChange, isFetching } = props;
   if (!props.isAuth) {
     return (
       <form
@@ -44,6 +26,7 @@ function AuthForm(props) {
           component={internatiolizedRenderField}
           label="label.email"
           validate={required}
+          onChange={handleInputChange}
         />
         <Field
           name="pass"
@@ -51,7 +34,7 @@ function AuthForm(props) {
           component={internatiolizedRenderField}
           label="label.pass"
           validate={validatePass}
-          value="123456"
+          onChange={handleInputChange}
         />
         <div className="form__line">
           <button
@@ -77,9 +60,7 @@ function AuthForm(props) {
   } else {
     return (
       <div className="success-msg">
-        <FormattedMessage id="msg.authorized">
-          
-          </FormattedMessage>
+        <FormattedMessage id="msg.authorized" />
       </div>
     );
   }
@@ -87,9 +68,9 @@ function AuthForm(props) {
 
 const mapStateToProps = (state) => {
   return {
-    isFetching: state.app.isFetching,
-    isAuth: state.app.isAuth,
-    errMsg: state.app.errMsg,
+    isFetching: state.login.isFetching,
+    isAuth: state.login.isAuth,
+    errMsg: state.login.errMsg,
   };
 }
 
