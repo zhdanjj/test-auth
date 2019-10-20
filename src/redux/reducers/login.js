@@ -1,7 +1,6 @@
 import {
-  AUTH_IS_FETCHING,
-  AUTH_SUCCESS,
-  AUTH_ERROR,
+  AUTH_USER,
+  RESET_AUTH_ERROR
 } from '@/redux/actions/login';
 
 const initialState = {
@@ -12,20 +11,27 @@ const initialState = {
 
 export function loginReducer(state = initialState, action) {
   switch (action.type) {
-    case AUTH_IS_FETCHING:
-      return {...state, isFetching: true};
-    case AUTH_SUCCESS:
-      return {
-        ...state, 
-        isFetching: false,
-        isAuth: true,
-      };
-    case AUTH_ERROR:
+    case AUTH_USER:
+      if (!action.payload) {
+        return {...state, isFetching: true};
+      } else if (action.error) {
+        return {
+          ...state,
+          isFetching: false,
+          errMsg: 'msg.noUserFound',
+        }
+      } else {
+        return {
+          ...state, 
+          isFetching: false,
+          isAuth: true,
+        };
+      }
+    case RESET_AUTH_ERROR:
       return {
         ...state,
-        isFetching: false,
-        errMsg: action.error
-      };
+        errMsg: ''
+      }
     default: return state;
   }
 };

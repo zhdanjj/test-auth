@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import AuthForm from '@/components/AuthForm';
-import { authUser, setAuthError } from '@/redux/actions/login';
+import { authUser, resetAuthError } from '@/redux/actions/login';
 import LangPicker from '@/components/LangPicker';
 
 class App extends React.Component {
@@ -10,16 +10,12 @@ class App extends React.Component {
     this.props.authUser(values.email, values.pass);
   }
 
-  resetErrorAfterInputChange = () => {
-    this.props.setAuthError('');
-  }
-
   render() {
     return (
       <div className="app">
         <AuthForm
           onSubmit={this.submit}
-          handleInputChange={this.resetErrorAfterInputChange}
+          handleInputChange={this.props.resetAuthError}
         />
         <LangPicker />
       </div>
@@ -38,8 +34,8 @@ const mapDispatchToProps = (dispatch) => {
     authUser: (userEmail, userPass) => {
       dispatch(authUser(userEmail, userPass));
     },
-    setAuthError: (error) => {
-      dispatch(setAuthError(error));
+    resetAuthError: () => {
+      dispatch(resetAuthError());
     }
   }
 };
