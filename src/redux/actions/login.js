@@ -5,7 +5,10 @@ export function resetAuthError() {
   return { type: RESET_AUTH_ERROR };
 }
 
-export const AUTH_USER = 'AUTH_USER';
+export const AUTH_USER_REQUEST = 'AUTH_USER_REQUEST';
+export const AUTH_USER_SUCCESS = 'AUTH_USER_SUCCESS';
+export const AUTH_USER_FAILURE = 'AUTH_USER_FAILURE';
+
 export function authUser(userEmail, userPass) {
   const params = new URLSearchParams();
   params.append('client_id', process.env.REACT_APP_CLIENT_ID);
@@ -15,7 +18,13 @@ export function authUser(userEmail, userPass) {
   params.append('grant_type', 'password');
 
   return {
-    type: AUTH_USER,
+    meta: {
+      types: {
+        request: AUTH_USER_REQUEST,
+        success: AUTH_USER_SUCCESS,
+        failure: AUTH_USER_FAILURE,
+      },
+    },
     payload: axios.post(process.env.REACT_APP_ENDPOINT, params),
   }
 }
